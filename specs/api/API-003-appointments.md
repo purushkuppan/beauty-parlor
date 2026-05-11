@@ -3,6 +3,12 @@
 ## Status
 Implemented
 
+## Standard Error Response
+All error responses return an `ErrorResponse` record:
+```json
+{ "timestamp": "ISO-8601 string", "status": 404, "error": "message" }
+```
+
 ## Related Requirement
 [REQ-002](../requirements/REQ-002-appointments.md)
 
@@ -54,8 +60,13 @@ Book an appointment (Customer or Admin).
   "status": "PENDING",
   "startTime": "ISO 8601",
   "endTime": "ISO 8601",
-  "service": { "name": "string", "price": 25.00 },
-  "staff": { "name": "string" }
+  "notes": "string | null",
+  "service": {
+    "id": "uuid", "name": "string", "description": "string",
+    "category": "HAIR", "price": 45.00, "durationMins": 45
+  },
+  "staff":    { "id": "uuid", "name": "string", "email": "string", "role": "STAFF" },
+  "customer": { "id": "uuid", "name": "string", "email": "string", "role": "CUSTOMER" }
 }
 ```
 
@@ -100,6 +111,10 @@ Cancel an appointment.
 **Errors**
 | Status | When |
 |--------|------|
-| 400 | Cancellation window passed (< 24h) |
+| 400 | Cancellation window passed (< 24h before start) |
+| 400 | Appointment is already `CANCELLED` |
+| 400 | Appointment is already `COMPLETED` |
 | 403 | Customer trying to cancel someone else's appointment |
 | 404 | Appointment not found |
+
+> **Implementation note:** Status validation uses an exhaustive switch on `AppointmentStatus` — only `PENDING` and `CONFIRMED` appointments may be cancelled.

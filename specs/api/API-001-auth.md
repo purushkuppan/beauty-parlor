@@ -7,6 +7,21 @@ Implemented
 - POST /register and POST /login are fully implemented.
 - POST /refresh is **not yet implemented** — the endpoint does not exist in the current backend.
 
+## Standard Error Response
+All error responses return an `ErrorResponse` record serialised as JSON:
+```json
+{ "timestamp": "ISO-8601 string", "status": 404, "error": "message" }
+```
+Validation failures (400) return a `ValidationErrorResponse` with a `fields` map:
+```json
+{
+  "timestamp": "ISO-8601 string",
+  "status": 400,
+  "error": "Validation failed",
+  "fields": { "email": "must be a well-formed email address" }
+}
+```
+
 ## Related Requirement
 [REQ-004](../requirements/REQ-004-auth.md)
 

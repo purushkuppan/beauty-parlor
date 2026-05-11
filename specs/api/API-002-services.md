@@ -3,6 +3,12 @@
 ## Status
 Implemented
 
+## Standard Error Response
+All error responses return an `ErrorResponse` record:
+```json
+{ "timestamp": "ISO-8601 string", "status": 404, "error": "message" }
+```
+
 ## Related Requirement
 [REQ-001](../requirements/REQ-001-services.md)
 

@@ -22,3 +22,6 @@ Implemented
 
 ## Business Rules
 - Deactivating a service hides it from the public catalog but does not cancel existing appointments.
+
+## Implementation Pattern
+`Service` is a mutable JPA entity, **not** a record. `ServiceRequest` (input) and `ServiceResponse` (output) are Java records. See [ADR-003](../decisions/ADR-003-java21-features.md).

@@ -27,3 +27,8 @@ Implemented
 ## Business Rules
 - Email must be unique across all roles.
 - Deactivating a user (isActive=false) does not cancel future appointments — admin must handle those separately.
+
+## Implementation Pattern
+`User` is a mutable JPA entity (`@Entity`), **not** a Java record. Records are used only for DTOs (`UserResponse`, `RegisterRequest`, etc.). Entities cannot be records because JPA requires a no-arg constructor, post-construction field population (`@GeneratedValue`, `@CreationTimestamp`), and class-level proxying for lazy loading — all incompatible with Java records.
+
+See [ADR-003](../decisions/ADR-003-java21-features.md) for the full rationale.

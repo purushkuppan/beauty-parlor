@@ -34,4 +34,8 @@ Implemented
 ## Business Rules
 - `endTime` is always `startTime + service.durationMins` — computed server-side, never accepted from client.
 - Cancellation only allowed when `status = PENDING | CONFIRMED` and `startTime > now + 24h`.
-- Status transitions: PENDING → CONFIRMED → COMPLETED; any state → CANCELLED.
+- Cancellation of a `CANCELLED` or `COMPLETED` appointment returns 400.
+- Status transitions: PENDING → CONFIRMED → COMPLETED; PENDING | CONFIRMED → CANCELLED.
+
+## Implementation Pattern
+`Appointment` is a mutable JPA entity, **not** a record. `AppointmentRequest` and `AppointmentResponse` are Java records. The cancel business rule is enforced via an exhaustive switch on `AppointmentStatus` (sealed-compatible) — a compile error results if a new status is added without updating the guard. See [ADR-003](../decisions/ADR-003-java21-features.md).

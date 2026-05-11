@@ -2,6 +2,7 @@ package com.beautyparlour.service;
 
 import com.beautyparlour.exception.AppException;
 import com.beautyparlour.model.dto.RegisterRequest;
+import com.beautyparlour.model.dto.UpdateStaffRequest;
 import com.beautyparlour.model.dto.UserResponse;
 import com.beautyparlour.model.entity.User;
 import com.beautyparlour.model.enums.Role;
@@ -35,6 +36,21 @@ public class StaffService {
         staff.setPhone(req.phone());
         staff.setPasswordHash(passwordEncoder.encode(req.password()));
         staff.setRole(Role.STAFF);
+        return UserResponse.from(userRepository.save(staff));
+    }
+
+    public UserResponse updateStaff(final UUID id, final UpdateStaffRequest req) {
+        final var staff = userRepository.findById(id)
+                .filter(u -> u.getRole() == Role.STAFF)
+                .orElseThrow(() -> new AppException.NotFound("Staff member not found"));
+
+        if (!staff.getEmail().equalsIgnoreCase(req.email()) && userRepository.existsByEmail(req.email())) {
+            throw new AppException.Conflict("Email already in use");
+        }
+
+        staff.setName(req.name());
+        staff.setEmail(req.email());
+        staff.setPhone(req.phone());
         return UserResponse.from(userRepository.save(staff));
     }
 

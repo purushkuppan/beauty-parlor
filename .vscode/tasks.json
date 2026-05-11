@@ -1,0 +1,51 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "backend: mvn spring-boot:run",
+      "type": "shell",
+      "command": "mvn spring-boot:run",
+      "options": {
+        "cwd": "${workspaceFolder}/beauty-parlour/backend"
+      },
+      "isBackground": true,
+      "presentation": {
+        "label": "Backend",
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "beauty-parlour"
+      },
+      "problemMatcher": {
+        "pattern": { "regexp": "^$" },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*Starting BeautyParlourApplication.*$",
+          "endsPattern": "^.*Started BeautyParlourApplication.*$"
+        }
+      }
+    },
+    {
+      "label": "frontend: npm start",
+      "type": "shell",
+      "command": "npm start",
+      "options": {
+        "cwd": "${workspaceFolder}/beauty-parlour/frontend"
+      },
+      "isBackground": true,
+      "presentation": {
+        "label": "Frontend",
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "beauty-parlour"
+      },
+      "problemMatcher": {
+        "pattern": { "regexp": "^$" },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "^.*Angular Live Development Server.*$",
+          "endsPattern": "^.*Compiled successfully.*$"
+        }
+      }
+    }
+  ]
+}

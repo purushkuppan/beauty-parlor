@@ -18,6 +18,10 @@ export class StaffService {
     return this.http.post<User>(this.base, payload);
   }
 
+  update(id: string, payload: { name: string; email: string; phone?: string }): Observable<User> {
+    return this.http.put<User>(`${this.base}/${id}`, payload);
+  }
+
   remove(id: string): Observable<void> {
     return this.http.delete<void>(`${this.base}/${id}`);
   }

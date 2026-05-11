@@ -21,11 +21,15 @@ export class AdminComponent implements OnInit {
   success = '';
 
   showServiceForm = false;
-  showStaffForm = false;
+  showStaffForm   = false;
   serviceForm: FormGroup;
   staffForm: FormGroup;
   savingService = false;
-  savingStaff = false;
+  savingStaff   = false;
+
+  editingStaff: User | null = null;
+  staffEditForm: FormGroup;
+  savingEdit = false;
 
   readonly categories = ['HAIR', 'SKIN', 'NAILS', 'MAKEUP'] as const;
 
@@ -48,6 +52,12 @@ export class AdminComponent implements OnInit {
       email:    ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8), Validators.pattern('.*\\d.*')]],
       phone:    ['']
+    });
+
+    this.staffEditForm = this.fb.group({
+      name:  ['', [Validators.required, Validators.maxLength(100)]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['']
     });
   }
 
@@ -115,6 +125,40 @@ export class AdminComponent implements OnInit {
         this.loadStaff();
       },
       error: err => { this.error = err.message; this.savingStaff = false; }
+    });
+  }
+
+  startEdit(member: User): void {
+    this.editingStaff = member;
+    this.showStaffForm = false;
+    this.staffEditForm.patchValue({
+      name:  member.name,
+      email: member.email,
+      phone: member.phone ?? ''
+    });
+    this.error = '';
+    this.success = '';
+  }
+
+  cancelEdit(): void {
+    this.editingStaff = null;
+    this.staffEditForm.reset();
+  }
+
+  saveEdit(): void {
+    if (this.staffEditForm.invalid || !this.editingStaff) return;
+    this.savingEdit = true;
+    this.error = '';
+    const { name, email, phone } = this.staffEditForm.value;
+    this.staffService.update(this.editingStaff.id, { name, email, phone }).subscribe({
+      next: () => {
+        this.success = 'Team member updated successfully.';
+        this.savingEdit = false;
+        this.editingStaff = null;
+        this.staffEditForm.reset();
+        this.loadStaff();
+      },
+      error: err => { this.error = err.message; this.savingEdit = false; }
     });
   }
 

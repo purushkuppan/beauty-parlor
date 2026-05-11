@@ -70,6 +70,31 @@ Add a new staff member (Admin only).
 
 ---
 
+### PUT /staff/{id}
+Update a staff member's name, email, or phone (Admin only). Password is not changed here.
+
+**Auth:** Bearer — ADMIN role required
+
+**Request Body**
+```json
+{
+  "name":  "string (required, max 100)",
+  "email": "string (required, valid email)",
+  "phone": "string (optional, max 20)"
+}
+```
+
+**Success — 200 OK** — returns updated `UserResponse`.
+
+**Errors**
+| Status | When |
+|--------|------|
+| 400 | Validation failure |
+| 404 | Staff member not found |
+| 409 | New email already used by another account |
+
+---
+
 ### DELETE /staff/{id}
 Deactivate a staff member (Admin only, soft delete).
 

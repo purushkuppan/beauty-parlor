@@ -1,6 +1,7 @@
 package com.beautyparlour.controller;
 
 import com.beautyparlour.model.dto.RegisterRequest;
+import com.beautyparlour.model.dto.UpdateStaffRequest;
 import com.beautyparlour.model.dto.UserResponse;
 import com.beautyparlour.service.StaffService;
 import jakarta.validation.Valid;
@@ -29,6 +30,13 @@ public class StaffController {
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse add(@Valid @RequestBody final RegisterRequest req) {
         return staffService.addStaff(req);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserResponse update(@PathVariable final UUID id,
+                               @Valid @RequestBody final UpdateStaffRequest req) {
+        return staffService.updateStaff(id, req);
     }
 
     @DeleteMapping("/{id}")

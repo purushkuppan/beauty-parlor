@@ -19,9 +19,12 @@ public class ServiceService {
     private final ServiceRepository serviceRepository;
 
     public List<ServiceResponse> listActive(final String category) {
-        // Null-safe switch (JEP 441) — case null handles missing query param cleanly
+        // null and "" must be separate cases — JEP 441 only allows case null, default
+        // not case null combined with a non-default constant
         return switch (category) {
-            case null, "" -> serviceRepository.findByIsActiveTrue()
+            case null -> serviceRepository.findByIsActiveTrue()
+                    .stream().map(ServiceResponse::from).toList();
+            case "" -> serviceRepository.findByIsActiveTrue()
                     .stream().map(ServiceResponse::from).toList();
             default -> serviceRepository.findByCategoryAndIsActiveTrue(
                             ServiceCategory.valueOf(category.toUpperCase()))

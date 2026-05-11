@@ -78,11 +78,14 @@ switch (appointment.getStatus()) {
 `ServiceService.listActive()` handles the optional `category` query param:
 ```java
 return switch (category) {
-    case null, "" -> serviceRepository.findByIsActiveTrue()...;
-    default       -> serviceRepository.findByCategoryAndIsActiveTrue(...)...;
+    case null -> serviceRepository.findByIsActiveTrue()...;
+    case ""   -> serviceRepository.findByIsActiveTrue()...;
+    default   -> serviceRepository.findByCategoryAndIsActiveTrue(...)...;
 };
 ```
 **Why:** Replaces a `null`-check `if/else` chain. Null is handled in the switch itself; no NPE risk.
+
+**Constraint:** `case null` may only appear alone or combined with `default` — not with other constant labels (e.g. `case null, ""` is a compile error). Empty string must be its own arm.
 
 ---
 

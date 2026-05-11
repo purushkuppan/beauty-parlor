@@ -134,14 +134,44 @@
     </form>
   </div>
 
+  <!-- Edit form — shown when a card's Edit button is clicked -->
+  <div *ngIf="editingStaff" class="inline-form inline-form--edit">
+    <h3>Edit: {{ editingStaff.name }}</h3>
+    <form [formGroup]="staffEditForm" (ngSubmit)="saveEdit()">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input formControlName="name" />
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" formControlName="email" />
+        </div>
+      </div>
+      <div class="form-group" style="max-width: 320px;">
+        <label>Phone</label>
+        <input formControlName="phone" placeholder="(555) 000-0000" />
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-primary" [disabled]="staffEditForm.invalid || savingEdit">
+          {{ savingEdit ? 'Saving...' : 'Save Changes' }}
+        </button>
+        <button type="button" class="btn-secondary" (click)="cancelEdit()">Cancel</button>
+      </div>
+    </form>
+  </div>
+
   <div class="admin-staff-grid">
-    <div class="staff-card" *ngFor="let m of staff">
+    <div class="staff-card" *ngFor="let m of staff" [class.editing]="editingStaff?.id === m.id">
       <div class="staff-avatar">{{ m.name.charAt(0) }}</div>
       <div class="staff-info">
         <h4>{{ m.name }}</h4>
         <p>{{ m.email }}</p>
       </div>
-      <button class="btn-danger-sm" (click)="removeStaff(m.id)">Remove</button>
+      <div class="staff-card-actions">
+        <button class="btn-edit-sm" (click)="startEdit(m)">Edit</button>
+        <button class="btn-danger-sm" (click)="removeStaff(m.id)">Remove</button>
+      </div>
     </div>
   </div>
   <p *ngIf="staff.length === 0" class="empty">No team members found.</p>

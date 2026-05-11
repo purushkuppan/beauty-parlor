@@ -17,8 +17,6 @@ target/
 .idea/
 *.iml
 .vscode/settings.json
-.vscode/launch.json
-.vscode/tasks.json
 *.suo
 *.user
 

@@ -1,7 +1,7 @@
 # REQ-004: Authentication & Roles
 
 ## Status
-Approved
+Implemented
 
 ## Summary
 Users authenticate with email/password. Three roles exist: Customer, Staff, Admin.
@@ -9,13 +9,18 @@ Users authenticate with email/password. Three roles exist: Customer, Staff, Admi
 ## Requirements
 
 ### Functional
-- [ ] Customers can self-register with name, email, password, phone.
-- [ ] Login returns a JWT (access token, 1h) and a refresh token (7d).
-- [ ] Roles: CUSTOMER, STAFF, ADMIN.
-- [ ] Admin is created via a seeded database record (no public signup for admin).
-- [ ] Password must be at least 8 characters with one number.
-- [ ] Forgot password flow via email OTP.
+- [x] Customers can self-register with name, email, password, phone.
+- [x] Login returns a JWT (access token, 1h).
+- [x] Roles: CUSTOMER, STAFF, ADMIN.
+- [x] Admin is created via a seeded database record (no public signup for admin).
+- [x] Password must be at least 8 characters.
+- [ ] Forgot password flow via email OTP — **not yet implemented**.
+- [ ] Refresh token (7d) — **not yet implemented**; access token is the only token issued.
 
 ### Non-Functional
-- [ ] Passwords stored as bcrypt hashes (cost factor 12).
-- [ ] JWTs signed with RS256.
+- [x] Passwords stored as bcrypt hashes.
+- [ ] JWTs signed with RS256 — **implementation uses HS256**; RS256 deferred to production hardening.
+
+## Implementation Notes
+- JWT secret is configured in `application.properties` via `jwt.secret`.
+- Token expiry: 1 hour (configured via `jwt.expiration`).

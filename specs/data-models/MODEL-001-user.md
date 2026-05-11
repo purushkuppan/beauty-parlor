@@ -1,7 +1,7 @@
 # MODEL-001: User
 
 ## Status
-Approved
+Implemented
 
 ## Related Requirement
 [REQ-004](../requirements/REQ-004-auth.md)

@@ -1,7 +1,7 @@
 # MODEL-003: Appointment
 
 ## Status
-Approved
+Implemented
 
 ## Related Requirement
 [REQ-002](../requirements/REQ-002-appointments.md)

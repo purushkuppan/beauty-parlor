@@ -1,7 +1,7 @@
 # API-002: Services
 
 ## Status
-Approved
+Implemented
 
 ## Related Requirement
 [REQ-001](../requirements/REQ-001-services.md)

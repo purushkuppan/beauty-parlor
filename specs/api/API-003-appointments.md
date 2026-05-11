@@ -1,7 +1,7 @@
 # API-003: Appointments
 
 ## Status
-Approved
+Implemented
 
 ## Related Requirement
 [REQ-002](../requirements/REQ-002-appointments.md)
@@ -25,8 +25,10 @@ Get available time slots for a staff member on a given date.
 
 **Success — 200 OK**
 ```json
-{ "availableSlots": ["09:00", "10:00", "11:30"] }
+["09:00", "10:00", "11:30"]
 ```
+
+> **Note:** Response is a plain JSON array of `HH:mm` strings, not a wrapped object. The original spec had `{ "availableSlots": [...] }` but the implementation returns a flat array — this spec was corrected to match.
 
 ---
 

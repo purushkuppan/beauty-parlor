@@ -1,7 +1,7 @@
 # MODEL-002: Service
 
 ## Status
-Approved
+Implemented
 
 ## Related Requirement
 [REQ-001](../requirements/REQ-001-services.md)
@@ -14,7 +14,7 @@ Approved
 | name         | string    | Yes      | max 100 chars                            | Service name             |
 | description  | string    | No       | max 500 chars                            | Short description        |
 | category     | enum      | Yes      | HAIR \| SKIN \| NAILS \| MAKEUP          | Grouping category        |
-| price        | decimal   | Yes      | positive, 2 decimal places               | Price in local currency  |
+| price        | decimal   | Yes      | positive, 2 decimal places               | Price in USD             |
 | durationMins | integer   | Yes      | 15–480                                   | Duration in minutes      |
 | isActive     | boolean   | Yes      | default true                             | Soft delete / visibility |
 | createdAt    | datetime  | Yes      | auto-set                                 | UTC timestamp            |

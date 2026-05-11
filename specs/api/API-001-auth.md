@@ -1,7 +1,11 @@
 # API-001: Authentication
 
 ## Status
-Approved
+Implemented
+
+## Implementation Notes
+- POST /register and POST /login are fully implemented.
+- POST /refresh is **not yet implemented** — the endpoint does not exist in the current backend.
 
 ## Related Requirement
 [REQ-004](../requirements/REQ-004-auth.md)

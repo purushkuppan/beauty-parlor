@@ -1,0 +1,16 @@
+<div class="page-header">
+  <h1>Meet Our Team</h1>
+  <p>Skilled professionals dedicated to your beauty</p>
+</div>
+
+<div *ngIf="loading" class="loading">Loading team...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<div class="staff-grid">
+  <div class="staff-card" *ngFor="let member of staff">
+    <div class="staff-avatar">{{ member.name[0] }}</div>
+    <h3>{{ member.name }}</h3>
+    <p class="staff-role">Beauty Specialist</p>
+    <a routerLink="/booking" [queryParams]="{ staffId: member.id }" class="btn-secondary">Book with {{ member.name.split(' ')[0] }}</a>
+  </div>
+</div>

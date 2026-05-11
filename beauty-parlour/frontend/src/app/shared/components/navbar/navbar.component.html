@@ -1,0 +1,22 @@
+<nav class="navbar">
+  <a class="navbar-brand" routerLink="/">Glamour Studio</a>
+  <ul class="nav-links">
+    <li><a routerLink="/services" routerLinkActive="active">Services</a></li>
+    <li><a routerLink="/staff" routerLinkActive="active">Our Team</a></li>
+    <li *ngIf="auth.isLoggedIn()">
+      <a routerLink="/booking" routerLinkActive="active">Book Now</a>
+    </li>
+    <li *ngIf="auth.hasRole('ADMIN')">
+      <a routerLink="/admin" routerLinkActive="active">Admin</a>
+    </li>
+    <li *ngIf="!auth.isLoggedIn()">
+      <a routerLink="/auth/login" routerLinkActive="active">Login</a>
+    </li>
+    <li *ngIf="!auth.isLoggedIn()">
+      <a routerLink="/auth/register" routerLinkActive="active">Register</a>
+    </li>
+    <li *ngIf="auth.isLoggedIn()">
+      <button class="btn-link" (click)="logout()">Logout</button>
+    </li>
+  </ul>
+</nav>

@@ -1,0 +1,40 @@
+# ── Node / Angular ──────────────────────────────────────────
+node_modules/
+dist/
+.angular/
+*.js.map
+
+# ── Java / Maven ─────────────────────────────────────────────
+target/
+*.class
+*.jar
+*.war
+!**/src/main/**
+!**/src/test/**
+.mvn/wrapper/maven-wrapper.jar
+
+# ── IDE ───────────────────────────────────────────────────────
+.idea/
+*.iml
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+*.suo
+*.user
+
+# ── OS ────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ── Environment / secrets ─────────────────────────────────────
+.env
+.env.local
+*.env
+
+# ── Logs ──────────────────────────────────────────────────────
+*.log
+logs/
+
+# ── Claude internal ───────────────────────────────────────────
+.claude/

@@ -1,0 +1,148 @@
+<div class="page-header">
+  <h1>Admin Dashboard</h1>
+</div>
+
+<div class="tab-bar">
+  <button [class.active]="activeTab === 'appointments'" (click)="activeTab = 'appointments'; clearMessages()">Appointments</button>
+  <button [class.active]="activeTab === 'services'"     (click)="activeTab = 'services'; clearMessages()">Services</button>
+  <button [class.active]="activeTab === 'team'"         (click)="activeTab = 'team'; clearMessages()">Team</button>
+</div>
+
+<div *ngIf="error"   class="error">{{ error }}</div>
+<div *ngIf="success" class="success">{{ success }}</div>
+
+<!-- ── Appointments ───────────────────────────────────────── -->
+<div *ngIf="activeTab === 'appointments'">
+  <table class="admin-table">
+    <thead>
+      <tr>
+        <th>Customer</th><th>Service</th><th>Staff</th><th>Date & Time</th><th>Status</th><th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let a of appointments">
+        <td>{{ a.customer.name }}</td>
+        <td>{{ a.service.name }}</td>
+        <td>{{ a.staff.name }}</td>
+        <td>{{ a.startTime | date:'medium' }}</td>
+        <td><span class="badge" [class]="a.status.toLowerCase()">{{ a.status }}</span></td>
+        <td>
+          <button *ngIf="a.status === 'PENDING' || a.status === 'CONFIRMED'"
+                  class="btn-danger-sm" (click)="cancelAppointment(a.id)">Cancel</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="appointments.length === 0" class="empty">No appointments found.</p>
+</div>
+
+<!-- ── Services ───────────────────────────────────────────── -->
+<div *ngIf="activeTab === 'services'">
+  <div class="section-actions">
+    <button class="btn-primary" (click)="showServiceForm = !showServiceForm">
+      {{ showServiceForm ? 'Cancel' : '+ Add Service' }}
+    </button>
+  </div>
+
+  <div *ngIf="showServiceForm" class="inline-form">
+    <h3>New Service</h3>
+    <form [formGroup]="serviceForm" (ngSubmit)="addService()">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Name *</label>
+          <input formControlName="name" placeholder="e.g. Deep Conditioning" />
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select formControlName="category">
+            <option value="">Select</option>
+            <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea formControlName="description" rows="2" placeholder="Short description"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Price (USD) *</label>
+          <input type="number" formControlName="price" placeholder="e.g. 75" min="0.01" step="0.01" />
+        </div>
+        <div class="form-group">
+          <label>Duration (min) *</label>
+          <input type="number" formControlName="durationMins" placeholder="e.g. 60" min="15" max="480" />
+        </div>
+      </div>
+      <button type="submit" class="btn-primary" [disabled]="serviceForm.invalid || savingService">
+        {{ savingService ? 'Saving...' : 'Add Service' }}
+      </button>
+    </form>
+  </div>
+
+  <table class="admin-table">
+    <thead>
+      <tr><th>Name</th><th>Category</th><th>Price</th><th>Duration</th><th></th></tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of services">
+        <td>{{ s.name }}</td>
+        <td>{{ s.category }}</td>
+        <td>${{ s.price }}</td>
+        <td>{{ s.durationMins }} min</td>
+        <td><button class="btn-danger-sm" (click)="deleteService(s.id)">Remove</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="services.length === 0" class="empty">No services found.</p>
+</div>
+
+<!-- ── Team ───────────────────────────────────────────────── -->
+<div *ngIf="activeTab === 'team'">
+  <div class="section-actions">
+    <button class="btn-primary" (click)="showStaffForm = !showStaffForm">
+      {{ showStaffForm ? 'Cancel' : '+ Add Team Member' }}
+    </button>
+  </div>
+
+  <div *ngIf="showStaffForm" class="inline-form">
+    <h3>New Team Member</h3>
+    <form [formGroup]="staffForm" (ngSubmit)="addStaff()">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input formControlName="name" placeholder="e.g. Sarah Johnson" />
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" formControlName="email" placeholder="sarah@salon.com" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Password * <small>(min 8 chars, 1 digit)</small></label>
+          <input type="password" formControlName="password" placeholder="••••••••" />
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input formControlName="phone" placeholder="(555) 000-0000" />
+        </div>
+      </div>
+      <button type="submit" class="btn-primary" [disabled]="staffForm.invalid || savingStaff">
+        {{ savingStaff ? 'Saving...' : 'Add Member' }}
+      </button>
+    </form>
+  </div>
+
+  <div class="admin-staff-grid">
+    <div class="staff-card" *ngFor="let m of staff">
+      <div class="staff-avatar">{{ m.name.charAt(0) }}</div>
+      <div class="staff-info">
+        <h4>{{ m.name }}</h4>
+        <p>{{ m.email }}</p>
+      </div>
+      <button class="btn-danger-sm" (click)="removeStaff(m.id)">Remove</button>
+    </div>
+  </div>
+  <p *ngIf="staff.length === 0" class="empty">No team members found.</p>
+</div>

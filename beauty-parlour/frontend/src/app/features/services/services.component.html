@@ -1,0 +1,27 @@
+<div class="page-header">
+  <h1>Our Services</h1>
+  <p>Discover our range of premium beauty treatments</p>
+</div>
+
+<div class="filter-bar">
+  <button [class.active]="!selectedCategory" (click)="filter(undefined)">All</button>
+  <button *ngFor="let cat of categories"
+          [class.active]="selectedCategory === cat"
+          (click)="filter(cat)">{{ cat }}</button>
+</div>
+
+<div *ngIf="loading" class="loading">Loading services...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<div class="services-grid">
+  <div class="service-card" *ngFor="let service of services">
+    <div class="service-category">{{ service.category }}</div>
+    <h3>{{ service.name }}</h3>
+    <p>{{ service.description }}</p>
+    <div class="service-meta">
+      <span class="price">${{ service.price }}</span>
+      <span class="duration">{{ service.durationMins }} min</span>
+    </div>
+    <a routerLink="/booking" [queryParams]="{ serviceId: service.id }" class="btn-primary">Book Now</a>
+  </div>
+</div>

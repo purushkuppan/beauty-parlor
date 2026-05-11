@@ -7,7 +7,6 @@ import com.beautyparlour.model.entity.User;
 import com.beautyparlour.model.enums.Role;
 import com.beautyparlour.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +25,11 @@ public class StaffService {
                 .stream().map(UserResponse::from).toList();
     }
 
-    public UserResponse addStaff(RegisterRequest req) {
+    public UserResponse addStaff(final RegisterRequest req) {
         if (userRepository.existsByEmail(req.email())) {
-            throw new AppException("Email already in use", HttpStatus.CONFLICT);
+            throw new AppException.Conflict("Email already in use");
         }
-        User staff = new User();
+        final var staff = new User();
         staff.setName(req.name());
         staff.setEmail(req.email());
         staff.setPhone(req.phone());
@@ -39,10 +38,10 @@ public class StaffService {
         return UserResponse.from(userRepository.save(staff));
     }
 
-    public void deactivateStaff(UUID id) {
-        User staff = userRepository.findById(id)
+    public void deactivateStaff(final UUID id) {
+        final var staff = userRepository.findById(id)
                 .filter(u -> u.getRole() == Role.STAFF)
-                .orElseThrow(() -> new AppException("Staff member not found", HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new AppException.NotFound("Staff member not found"));
         staff.setActive(false);
         userRepository.save(staff);
     }

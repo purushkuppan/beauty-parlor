@@ -18,24 +18,25 @@ public class JwtUtil {
     private final long refreshTokenExpiry;
 
     public JwtUtil(
-            @Value("${app.jwt.secret:beauty-parlour-secret-key-must-be-at-least-256-bits-long-for-hs256}") String secret,
-            @Value("${app.jwt.access-token-expiry-ms:3600000}") long accessTokenExpiry,
-            @Value("${app.jwt.refresh-token-expiry-ms:604800000}") long refreshTokenExpiry
+            @Value("${app.jwt.secret:beauty-parlour-secret-key-must-be-at-least-256-bits-long-for-hs256}") final String secret,
+            @Value("${app.jwt.access-token-expiry-ms:3600000}") final long accessTokenExpiry,
+            @Value("${app.jwt.refresh-token-expiry-ms:604800000}") final long refreshTokenExpiry
     ) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.accessTokenExpiry = accessTokenExpiry;
         this.refreshTokenExpiry = refreshTokenExpiry;
     }
 
-    public String generateAccessToken(String email, String role) {
+    public String generateAccessToken(final String email, final String role) {
         return buildToken(email, role, accessTokenExpiry, "access");
     }
 
-    public String generateRefreshToken(String email, String role) {
+    public String generateRefreshToken(final String email, final String role) {
         return buildToken(email, role, refreshTokenExpiry, "refresh");
     }
 
-    private String buildToken(String subject, String role, long expiryMs, String type) {
+    private String buildToken(final String subject, final String role,
+                               final long expiryMs, final String type) {
         return Jwts.builder()
                 .subject(subject)
                 .claim("role", role)
@@ -46,16 +47,16 @@ public class JwtUtil {
                 .compact();
     }
 
-    public Claims parseToken(String token) {
+    public Claims parseToken(final String token) {
         return Jwts.parser().verifyWith(key).build()
                 .parseSignedClaims(token).getPayload();
     }
 
-    public String extractEmail(String token) {
+    public String extractEmail(final String token) {
         return parseToken(token).getSubject();
     }
 
-    public boolean isTokenValid(String token) {
+    public boolean isTokenValid(final String token) {
         try {
             parseToken(token);
             return true;

@@ -7,7 +7,6 @@ import com.beautyparlour.model.enums.Role;
 import com.beautyparlour.repository.UserRepository;
 import com.beautyparlour.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +20,11 @@ public class AuthService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public UserResponse register(RegisterRequest req) {
+    public UserResponse register(final RegisterRequest req) {
         if (userRepository.existsByEmail(req.email())) {
-            throw new AppException("Email already registered", HttpStatus.CONFLICT);
+            throw new AppException.Conflict("Email already registered");
         }
-        User user = new User();
+        final var user = new User();
         user.setName(req.name());
         user.setEmail(req.email());
         user.setPasswordHash(passwordEncoder.encode(req.password()));
@@ -34,18 +33,18 @@ public class AuthService {
         return UserResponse.from(userRepository.save(user));
     }
 
-    public LoginResponse login(LoginRequest req) {
-        User user = userRepository.findByEmail(req.email())
-                .orElseThrow(() -> new AppException("Invalid email or password", HttpStatus.UNAUTHORIZED));
+    public LoginResponse login(final LoginRequest req) {
+        final var user = userRepository.findByEmail(req.email())
+                .orElseThrow(() -> new AppException.Unauthorized("Invalid email or password"));
 
         if (!passwordEncoder.matches(req.password(), user.getPasswordHash())) {
-            throw new AppException("Invalid email or password", HttpStatus.UNAUTHORIZED);
+            throw new AppException.Unauthorized("Invalid email or password");
         }
         if (!user.isActive()) {
-            throw new AppException("Account is deactivated", HttpStatus.UNAUTHORIZED);
+            throw new AppException.Unauthorized("Account is deactivated");
         }
 
-        String role = user.getRole().name();
+        final var role = user.getRole().name();
         return new LoginResponse(
                 jwtUtil.generateAccessToken(user.getEmail(), role),
                 jwtUtil.generateRefreshToken(user.getEmail(), role),
@@ -53,13 +52,13 @@ public class AuthService {
         );
     }
 
-    public String refresh(RefreshTokenRequest req) {
+    public String refresh(final RefreshTokenRequest req) {
         if (!jwtUtil.isTokenValid(req.refreshToken())) {
-            throw new AppException("Refresh token invalid or expired", HttpStatus.UNAUTHORIZED);
+            throw new AppException.Unauthorized("Refresh token invalid or expired");
         }
-        String email = jwtUtil.extractEmail(req.refreshToken());
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new AppException("User not found", HttpStatus.UNAUTHORIZED));
+        final var email = jwtUtil.extractEmail(req.refreshToken());
+        final var user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException.Unauthorized("User not found"));
         return jwtUtil.generateAccessToken(user.getEmail(), user.getRole().name());
     }
 }

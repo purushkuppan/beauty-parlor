@@ -27,14 +27,14 @@ public class StaffController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
-    public UserResponse add(@Valid @RequestBody RegisterRequest req) {
+    public UserResponse add(@Valid @RequestBody final RegisterRequest req) {
         return staffService.addStaff(req);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
-    public void remove(@PathVariable UUID id) {
+    public void remove(@PathVariable final UUID id) {
         staffService.deactivateStaff(id);
     }
 }

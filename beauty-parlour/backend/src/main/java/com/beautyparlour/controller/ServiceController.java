@@ -20,27 +20,27 @@ public class ServiceController {
     private final ServiceService serviceService;
 
     @GetMapping
-    public List<ServiceResponse> list(@RequestParam(required = false) String category) {
+    public List<ServiceResponse> list(@RequestParam(required = false) final String category) {
         return serviceService.listActive(category);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ADMIN')")
-    public ServiceResponse create(@Valid @RequestBody ServiceRequest req) {
+    public ServiceResponse create(@Valid @RequestBody final ServiceRequest req) {
         return serviceService.create(req);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ServiceResponse update(@PathVariable UUID id, @Valid @RequestBody ServiceRequest req) {
+    public ServiceResponse update(@PathVariable final UUID id, @Valid @RequestBody final ServiceRequest req) {
         return serviceService.update(id, req);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ADMIN')")
-    public void delete(@PathVariable UUID id) {
+    public void delete(@PathVariable final UUID id) {
         serviceService.deactivate(id);
     }
 }

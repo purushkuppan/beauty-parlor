@@ -18,17 +18,17 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponse register(@Valid @RequestBody RegisterRequest req) {
+    public UserResponse register(@Valid @RequestBody final RegisterRequest req) {
         return authService.register(req);
     }
 
     @PostMapping("/login")
-    public LoginResponse login(@Valid @RequestBody LoginRequest req) {
+    public LoginResponse login(@Valid @RequestBody final LoginRequest req) {
         return authService.login(req);
     }
 
     @PostMapping("/refresh")
-    public Map<String, String> refresh(@Valid @RequestBody RefreshTokenRequest req) {
+    public Map<String, String> refresh(@Valid @RequestBody final RefreshTokenRequest req) {
         return Map.of("accessToken", authService.refresh(req));
     }
 }

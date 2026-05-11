@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -22,27 +23,29 @@ public class AppointmentController {
 
     @GetMapping("/availability")
     public List<String> availability(
-            @RequestParam UUID staffId,
-            @RequestParam UUID serviceId,
-            @RequestParam String date) {
+            @RequestParam final UUID staffId,
+            @RequestParam final UUID serviceId,
+            @RequestParam final String date) {
         return appointmentService.getAvailableSlots(staffId, serviceId, LocalDate.parse(date));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AppointmentResponse book(@Valid @RequestBody AppointmentRequest req, Authentication auth) {
+    public AppointmentResponse book(@Valid @RequestBody final AppointmentRequest req, final Authentication auth) {
         return appointmentService.book(req, auth.getName());
     }
 
     @GetMapping
-    public List<AppointmentResponse> list(Authentication auth) {
-        String role = auth.getAuthorities().iterator().next().getAuthority();
+    public List<AppointmentResponse> list(final Authentication auth) {
+        final var role = auth.getAuthorities().stream()
+                .findFirst().map(GrantedAuthority::getAuthority).orElseThrow();
         return appointmentService.list(auth.getName(), role);
     }
 
     @PatchMapping("/{id}/cancel")
-    public AppointmentResponse cancel(@PathVariable UUID id, Authentication auth) {
-        String role = auth.getAuthorities().iterator().next().getAuthority();
+    public AppointmentResponse cancel(@PathVariable final UUID id, final Authentication auth) {
+        final var role = auth.getAuthorities().stream()
+                .findFirst().map(GrantedAuthority::getAuthority).orElseThrow();
         return appointmentService.cancel(id, auth.getName(), role);
     }
 }

@@ -3,6 +3,7 @@ export interface User {
   name: string;
   email: string;
   role: 'CUSTOMER' | 'STAFF' | 'ADMIN';
+  phone?: string;
 }
 
 export interface LoginResponse {

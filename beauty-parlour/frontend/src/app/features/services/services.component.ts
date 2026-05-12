@@ -22,6 +22,7 @@ export class ServicesComponent implements OnInit {
 
   load(): void {
     this.loading = true;
+    this.error = '';
     this.serviceService.getAll(this.selectedCategory).subscribe({
       next: data => { this.services = data; this.loading = false; },
       error: err => { this.error = err.message; this.loading = false; }

@@ -10,7 +10,7 @@
           (click)="filter(cat)">{{ cat }}</button>
 </div>
 
-<div *ngIf="loading" class="loading">Loading services...</div>
+<div *ngIf="loading && services.length === 0" class="loading">Loading services...</div>
 <div *ngIf="error" class="error">{{ error }}</div>
 
 <div class="services-grid">
